@@ -13,7 +13,7 @@ const flowers = parse(fileContent, {
   skip_empty_lines: true
 });
 
-const seasonalFlowers = flowers.filter(flower => 
+let seasonalFlowers = flowers.filter(flower => 
   flower.season === (new Date().getMonth() >= 2 && new Date().getMonth() <= 8 ? 'summer' : 'spring')
 );
 ---
@@ -32,7 +32,7 @@ const seasonalFlowers = flowers.filter(flower =>
     
     <section class="my-16">
       <h2 class="text-3xl font-bold mb-8 text-center">Seasonal Highlights</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="flower-grid">
         {seasonalFlowers.map((flower) => (
           <FlowerCard flower={flower} />
         ))}
@@ -42,6 +42,24 @@ const seasonalFlowers = flowers.filter(flower =>
     <TagCloud />
   </main>
 </Layout>
+
+<script>
+  const seasonalFlowers = JSON.parse(`{JSON.stringify(seasonalFlowers)}`);
+  document.addEventListener('search', (event) => {
+    const searchTerm = (event as CustomEvent).detail.toLowerCase();
+    const flowerGrid = document.getElementById('flower-grid');
+    const filteredFlowers = seasonalFlowers.filter(flower => 
+      flower.name.toLowerCase().includes(searchTerm) || 
+      flower.description.toLowerCase().includes(searchTerm)
+    );
+    flowerGrid.innerHTML = filteredFlowers.map(flower => `
+      <div class="flower-card">
+        <h3>${flower.name}</h3>
+        <p>${flower.description}</p>
+      </div>
+    `).join('');
+  });
+</script>
 
 <style>
   .text-gradient {

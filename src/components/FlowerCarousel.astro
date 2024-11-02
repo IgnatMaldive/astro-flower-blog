@@ -18,7 +18,7 @@ const flowers = parse(fileContent, {
           <a href={`/flowers/${flower.name.toLowerCase().replace(/\s+/g, '-')}`} class="block">
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
               <img 
-                src={`https://picsum.photos/seed/${flower.name.toLowerCase()}/${flower.image}/800/600`} 
+                src={`https://picsum.photos/seed/${flower.image}/800/600`} 
                 alt={flower.name} 
                 class="w-full h-64 object-cover"
               />

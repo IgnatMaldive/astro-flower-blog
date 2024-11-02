@@ -3,9 +3,20 @@ import Layout from '../../layouts/Layout.astro';
 import { parse } from 'csv-parse/sync';
 import { readFileSync } from 'fs';
 
+type Flower = {
+  id: number;
+  name: string;
+  description: string;
+  season: string;
+  color: string;
+  type: string;
+  featured: boolean;
+  image: number;
+};
+
 export async function getStaticPaths() {
   const fileContent = readFileSync('src/data/flowers.csv', 'utf-8');
-  const flowers = parse(fileContent, {
+  const flowers: Flower[] = parse(fileContent, {
     columns: true,
     skip_empty_lines: true
   });
@@ -16,8 +27,8 @@ export async function getStaticPaths() {
   }));
 }
 
-const { flower } = Astro.props;
-const imageUrl = `https://picsum.photos/seed/${flower.name.toLowerCase()}/${flower.image}/1200/800`;
+const { flower } = Astro.props as { flower: Flower };
+const imageUrl = `https://picsum.photos/seed/${flower.image}/1200/800`;
 ---
 
 <Layout title={`${flower.name} - Blooming Beauty`}>
